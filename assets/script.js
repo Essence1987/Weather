@@ -110,6 +110,28 @@ document.addEventListener('DOMContentLoaded', function() {
     updateSearchedCitiesUI(parsedCities);
   }
 
+  // Get user's location and set it as the default city
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      function(position) {
+        const { latitude, longitude } = position.coords;
+        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=imperial&appid=996d1e5bbde7df636e3040824eb2d0d9`)
+          .then(response => response.json())
+          .then(data => {
+            const defaultCity = data.name;
+            cityInput.value = defaultCity;
+            getCurrentWeather(defaultCity);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
+      function(error) {
+        console.log(error);
+      }
+    );
+  }
+
   searchButton.addEventListener('click', function() {
     city = cityInput.value;
     getCurrentWeather(city);
