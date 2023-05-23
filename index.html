@@ -18,12 +18,17 @@
         <div class="search-input">
           <input type="text" id="cityInput" placeholder="Enter a city">
           <button id="searchButton">Search</button>
+          <div id="errorMessage" style="display: none;"></div>
+          <div class="searched-cities">
+            <h2>Last Searched Cities:</h2>
+            <ul id="searchedCities"></ul>
+          </div>          
         </div>
       </div>
       <div class="weather-info">
         <h2 id="cityName"></h2>
         <p id="currentDate"></p>
-        <img id="weatherIcon" alt="Weather Icon">
+        <img id="weatherIcon" alt="Weather Icon" style="display: none;">
       </div>
       <div class="weather-details">
         <p id="temperature"></p>
