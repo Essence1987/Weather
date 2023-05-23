@@ -1,20 +1,20 @@
-fetch('https://api.openweathermap.org/data/2.5/forecast?q=Tacoma&units=imperial&appid=996d1e5bbde7df636e3040824eb2d0d9')
+fetch('https://api.openweathermap.org/data/2.5/weather?q=Tacoma&units=imperial&appid=996d1e5bbde7df636e3040824eb2d0d9')
   .then(response => response.json())
   .then(data => {
     console.log(data);
 
     const formattedData = {
-      City: data.city.name,
-      WeatherIcon: data.list[0].weather[0].icon,
-      Temp: data.list[0].main.temp,
-      Wind: data.list[0].wind.speed,
-      Humidity: data.list[0].main.humidity,
+      City: data.name,
+      WeatherIcon: data.weather[0].icon,
+      Temp: data.main.temp,
+      Wind: data.wind.speed,
+      Humidity: data.main.humidity,
     };
-    console.log(data.city.name);
-    console.log(data.list[0].weather[0].icon);
-    console.log(data.list[0].main.temp);
-    console.log(data.list[0].wind.speed);
-    console.log(data.list[0].main.humidity);
+    console.log(data.name);
+    console.log(data.weather[0].icon);
+    console.log(data.main.temp);
+    console.log(data.wind.speed);
+    console.log(data.main.humidity);
 
     const weatherDataDiv = document.getElementById('weatherData');
 
@@ -24,7 +24,7 @@ fetch('https://api.openweathermap.org/data/2.5/forecast?q=Tacoma&units=imperial&
     icon.src = `https://openweathermap.org/img/wn/${formattedData.WeatherIcon}@2x.png`; // Set the src attribute to the weather icon URL
     icon.alt = 'Weather Icon'; // Set an alt attribute for accessibility
 
-    paragraph.textContent = `City: ${formattedData.City}, Temperature: ${formattedData.Temp}, Wind: ${formattedData.Wind}, Humidity: ${formattedData.Humidity}`;
+    paragraph.textContent = `City: ${formattedData.City}, Temperature: ${formattedData.Temp}°F, Wind: ${formattedData.Wind} mph, Humidity: ${formattedData.Humidity}%`;
 
     // Append the icon and paragraph to the weatherDataDiv
     weatherDataDiv.appendChild(icon);
