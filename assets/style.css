@@ -1,21 +1,66 @@
+/* Header */
 header {
-    background-color: darkblue;
-    color: white;
-    padding: 10px;
-    text-align: center;
-  }
-  
-  nav {
-    display: flex;
-    justify-content: center;
-  }
-  
-  nav ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  nav li {
-    display: inline-block;
-    margin-right: 10px;
-  }
+  background-color: darkblue;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+/* Weather Data Container */
+#weatherData {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+/* Search Box Container */
+.search-box {
+  text-align: center;
+  margin-bottom: 20px;
+  align-self: flex-start;
+  margin-left: 20px;
+}
+
+.search-box h2 {
+  margin-bottom: 10px;
+}
+
+.search-input input {
+  padding: 5px;
+  margin-right: 5px;
+}
+
+.search-input button {
+  padding: 5px 10px;
+}
+
+/* Weather Info Container */
+.weather-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.weather-info h2 {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.weather-info img {
+  margin-bottom: 5px;
+}
+
+/* Weather Details Container */
+.weather-details {
+  display: flex;
+  justify-content: space-between;
+  width: 200px;
+}
+
+.weather-details p {
+  flex: 1;
+  text-align: center;
+  margin: 5px;
+}

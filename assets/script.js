@@ -16,19 +16,24 @@ fetch('https://api.openweathermap.org/data/2.5/weather?q=Tacoma&units=imperial&a
     console.log(data.wind.speed);
     console.log(data.main.humidity);
 
-    const weatherDataDiv = document.getElementById('weatherData');
+    const cityNameElement = document.getElementById('cityName');
+    const currentDateElement = document.getElementById('currentDate');
+    const weatherIconElement = document.getElementById('weatherIcon');
+    const temperatureElement = document.getElementById('temperature');
+    const windElement = document.getElementById('wind');
+    const humidityElement = document.getElementById('humidity');
 
-    const paragraph = document.createElement('p');
-    const icon = document.createElement('img'); // Create an <img> element
+    cityNameElement.textContent = `${formattedData.City}:`;
+    currentDateElement.textContent = getCurrentDate();
+    weatherIconElement.src = `https://openweathermap.org/img/wn/${formattedData.WeatherIcon}.png`;
+    temperatureElement.textContent = `Temperature: ${formattedData.Temp}°F`;
+    windElement.textContent = `Wind: ${formattedData.Wind} mph`;
+    humidityElement.textContent = `Humidity: ${formattedData.Humidity}%`;
 
-    icon.src = `https://openweathermap.org/img/wn/${formattedData.WeatherIcon}@2x.png`; // Set the src attribute to the weather icon URL
-    icon.alt = 'Weather Icon'; // Set an alt attribute for accessibility
-
-    paragraph.textContent = `City: ${formattedData.City}, Temperature: ${formattedData.Temp}°F, Wind: ${formattedData.Wind} mph, Humidity: ${formattedData.Humidity}%`;
-
-    // Append the icon and paragraph to the weatherDataDiv
-    weatherDataDiv.appendChild(icon);
-    weatherDataDiv.appendChild(paragraph);
+    function getCurrentDate() {
+      const date = new Date();
+      return date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
   })
   .catch(error => {
     console.log(error);
