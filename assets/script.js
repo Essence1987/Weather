@@ -1,32 +1,35 @@
-const weather = document.getElementById('current');
-const resultList = document.getElementById('result');
-
-fetch('https://api.openweathermap.org/data/2.5/forecast?q=Detroit&units=imperial&appid=996d1e5bbde7df636e3040824eb2d0d9')
-.then(response =>response.json())
-.then(data => {
+fetch('https://api.openweathermap.org/data/2.5/forecast?q=Tacoma&units=imperial&appid=996d1e5bbde7df636e3040824eb2d0d9')
+  .then(response => response.json())
+  .then(data => {
     console.log(data);
 
     const formattedData = {
-        City: data.city.name,
-        weather: weather.icon,
-        Temp: data.temperature.value,
-        wind: data.wind.speed,
-        Humidity: data.humidity,
-        
-    }
-        console.log(data.city.name);
-        console.log(data.clouds.all);
-        console.log(data.temperature.all);
-        console.log(data.wind.speed);
-        console.log(data.humidity);
-        console.log(data.timestamp);
+      City: data.city.name,
+      WeatherIcon: data.list[0].weather[0].icon,
+      Temp: data.list[0].main.temp,
+      Wind: data.list[0].wind.speed,
+      Humidity: data.list[0].main.humidity,
+    };
+    console.log(data.city.name);
+    console.log(data.list[0].weather[0].icon);
+    console.log(data.list[0].main.temp);
+    console.log(data.list[0].wind.speed);
+    console.log(data.list[0].main.humidity);
 
-    data.list.forEach(item => {
-        const listItem=document.createElement('li');
-        listItem.textContent = item.name;
-        resultList.appendChild(listItem);
-    })
-})
-.catch(error => {
+    const weatherDataDiv = document.getElementById('weatherData');
+
+    const paragraph = document.createElement('p');
+    const icon = document.createElement('img'); // Create an <img> element
+
+    icon.src = `https://openweathermap.org/img/wn/${formattedData.WeatherIcon}@2x.png`; // Set the src attribute to the weather icon URL
+    icon.alt = 'Weather Icon'; // Set an alt attribute for accessibility
+
+    paragraph.textContent = `City: ${formattedData.City}, Temperature: ${formattedData.Temp}, Wind: ${formattedData.Wind}, Humidity: ${formattedData.Humidity}`;
+
+    // Append the icon and paragraph to the weatherDataDiv
+    weatherDataDiv.appendChild(icon);
+    weatherDataDiv.appendChild(paragraph);
+  })
+  .catch(error => {
     console.log(error);
-})
+  });
