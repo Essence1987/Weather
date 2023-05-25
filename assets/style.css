@@ -74,3 +74,40 @@ header {
   padding: 0;
   margin: 0;
 }
+
+.forecast {
+  margin-top: 20px;
+}
+
+.forecast h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.forecast-info {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+.forecast-day {
+  background-color: #f0f0f0;
+  padding: 10px;
+  text-align: center;
+}
+
+.forecast-day h3 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.forecast-day img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 5px;
+}
+
+.forecast-day p {
+  font-size: 14px;
+  margin-bottom: 3px;
+}

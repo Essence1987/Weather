@@ -75,6 +75,12 @@ function getCurrentForecast(cityName) {
           Humidity: item.main.humidity,
         };
 
+        console.log(getForecastDay(item.dt_txt));
+        console.log(item.weather[0].icon);
+        console.log(item.main.temp);
+        console.log(item.wind.speed);
+        console.log(item.main.humidity);
+
         const forecastDayElement = document.getElementById(`forecastDay${index + 1}`);
         const forecastWeatherIconElement = document.getElementById(`forecastWeatherIcon${index + 1}`);
         const forecastTemperatureElement = document.getElementById(`forecastTemperature${index + 1}`);
@@ -167,6 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const defaultCity = data.name;
             cityInput.value = defaultCity;
             getCurrentWeather(defaultCity);
+            getCurrentForecast(defaultCity);
           })
           .catch(error => {
             console.log(error);
