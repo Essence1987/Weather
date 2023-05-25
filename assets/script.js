@@ -53,6 +53,47 @@ function getCurrentWeather(cityName) {
     });
 }
 
+function getCurrentForecast(cityName) {
+  fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&units=imperial&appid=996d1e5bbde7df636e3040824eb2d0d9`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('City not found. Check spelling and try again.');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+
+      const forecastData = data.list.slice(0, 5); // Get the forecast data for the next 5 days
+
+      forecastData.forEach((item, index) => {
+        const formattedData = {
+          Day: getForecastDay(item.dt_txt),
+          WeatherIcon: item.weather[0].icon,
+          Temp: item.main.temp,
+          Wind: item.wind.speed,
+          Humidity: item.main.humidity,
+        };
+
+        const forecastDayElement = document.getElementById(`forecastDay${index + 1}`);
+        const forecastWeatherIconElement = document.getElementById(`forecastWeatherIcon${index + 1}`);
+        const forecastTemperatureElement = document.getElementById(`forecastTemperature${index + 1}`);
+        const forecastWindElement = document.getElementById(`forecastWind${index + 1}`);
+        const forecastHumidityElement = document.getElementById(`forecastHumidity${index + 1}`);
+
+        forecastDayElement.textContent = formattedData.Day;
+        forecastWeatherIconElement.src = `https://openweathermap.org/img/wn/${formattedData.WeatherIcon}.png`;
+        forecastTemperatureElement.textContent = `Temperature: ${formattedData.Temp}°F`;
+        forecastWindElement.textContent = `Wind: ${formattedData.Wind} mph`;
+        forecastHumidityElement.textContent = `Humidity: ${formattedData.Humidity}%`;
+      });
+    })
+    .catch(error => {
+      console.log(error);
+      displayErrorMessage(error.message);
+    });
+}
+
 function displayErrorMessage(message) {
   const errorMessageElement = document.getElementById('errorMessage');
   errorMessageElement.textContent = message;
@@ -100,6 +141,11 @@ function getCurrentDate() {
   return date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 }
 
+function getForecastDay(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', { weekday: 'long' });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   const searchButton = document.getElementById('searchButton');
   const cityInput = document.getElementById('cityInput');
@@ -135,6 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
   searchButton.addEventListener('click', function() {
     city = cityInput.value;
     getCurrentWeather(city);
+    getCurrentForecast(city);
     clearErrorMessage(); // Clear the error message
   });
 });
