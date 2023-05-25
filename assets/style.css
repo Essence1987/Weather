@@ -9,19 +9,18 @@ header {
 /* Weather Data Container */
 #weatherData {
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
+  flex-direction: column; /* Change to column */
+  align-items: center; /* Align items in the center */
   margin-top: 20px;
   width: 75%; /* Adjust the width of the API results */
+  margin: 0 auto; /* Center the weather data container */
 }
 
 /* Search Box Container */
 .search-box {
   text-align: center;
   margin-bottom: 20px;
-  align-self: flex-start;
-  margin-left: 20px;
-  width: 25%; /* Adjust the width of the search box */
+  width: 100%; /* Adjust the width of the search box */
 }
 
 .search-box h2 {
@@ -43,7 +42,6 @@ header {
   flex-direction: column;
   align-items: center;
   margin-bottom: 10px;
-  flex: 1; /* Let the API results take up remaining space */
 }
 
 .weather-info h2 {
@@ -77,6 +75,12 @@ header {
 
 .forecast {
   margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping to new lines */
+  justify-content: center; /* Center the forecast items horizontally */
+  gap: 20px; /* Set spacing between forecast items */
+  width: 100%; /* Set width to 100% */
+  order: 3; /* Move the forecast section to the bottom */
 }
 
 .forecast h2 {
@@ -85,15 +89,19 @@ header {
 }
 
 .forecast-info {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
+  display: flex; /* Updated to flex */
+  flex-wrap: wrap; /* Allow wrapping to new lines */
+  gap: 20px; /* Updated to set spacing between forecast days */
+  width: 100%; /* Set width to 100% to allow horizontal scrolling */
+  justify-content: center; /* Center the forecast days horizontally */
 }
 
 .forecast-day {
   background-color: #f0f0f0;
   padding: 10px;
   text-align: center;
+  width: 20%; /* Each forecast day takes up 20% of the container width */
+  box-sizing: border-box;
 }
 
 .forecast-day h3 {
@@ -110,4 +118,23 @@ header {
 .forecast-day p {
   font-size: 14px;
   margin-bottom: 3px;
+}
+
+/* Error Message */
+#errorMessage {
+  color: red;
+  margin-top: 10px;
+}
+
+/* General Styling */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
 }

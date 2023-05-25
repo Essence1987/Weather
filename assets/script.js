@@ -64,35 +64,54 @@ function getCurrentForecast(cityName) {
     .then(data => {
       console.log(data);
 
-      const forecastData = data.list.slice(0, 5); // Get the forecast data for the next 5 days
+      const forecastData = data.list;
 
-      forecastData.forEach((item, index) => {
+      // Create an object to store the forecast data grouped by day
+      const dailyForecasts = {};
+
+      forecastData.forEach(item => {
+        const date = item.dt_txt.split(' ')[0];
+
+        if (dailyForecasts[date]) {
+          dailyForecasts[date].push(item);
+        } else {
+          dailyForecasts[date] = [item];
+        }
+      });
+
+      let index = 1;
+      for (const date in dailyForecasts) {
+        if (index > 5) break; // Display only the forecast for the next 5 days
+
+        const dayForecast = dailyForecasts[date][0];
         const formattedData = {
-          Day: getForecastDay(item.dt_txt),
-          WeatherIcon: item.weather[0].icon,
-          Temp: item.main.temp,
-          Wind: item.wind.speed,
-          Humidity: item.main.humidity,
+          Day: getForecastDay(dayForecast.dt_txt),
+          WeatherIcon: dayForecast.weather[0].icon,
+          Temp: dayForecast.main.temp,
+          Wind: dayForecast.wind.speed,
+          Humidity: dayForecast.main.humidity,
         };
 
-        console.log(getForecastDay(item.dt_txt));
-        console.log(item.weather[0].icon);
-        console.log(item.main.temp);
-        console.log(item.wind.speed);
-        console.log(item.main.humidity);
+        console.log(formattedData.Day);
+        console.log(formattedData.WeatherIcon);
+        console.log(formattedData.Temp);
+        console.log(formattedData.Wind);
+        console.log(formattedData.Humidity);
 
-        const forecastDayElement = document.getElementById(`forecastDay${index + 1}`);
-        const forecastWeatherIconElement = document.getElementById(`forecastWeatherIcon${index + 1}`);
-        const forecastTemperatureElement = document.getElementById(`forecastTemperature${index + 1}`);
-        const forecastWindElement = document.getElementById(`forecastWind${index + 1}`);
-        const forecastHumidityElement = document.getElementById(`forecastHumidity${index + 1}`);
+        const forecastDayElement = document.getElementById(`forecastDay${index}`);
+        const forecastWeatherIconElement = document.getElementById(`forecastWeatherIcon${index}`);
+        const forecastTemperatureElement = document.getElementById(`forecastTemperature${index}`);
+        const forecastWindElement = document.getElementById(`forecastWind${index}`);
+        const forecastHumidityElement = document.getElementById(`forecastHumidity${index}`);
 
         forecastDayElement.textContent = formattedData.Day;
         forecastWeatherIconElement.src = `https://openweathermap.org/img/wn/${formattedData.WeatherIcon}.png`;
         forecastTemperatureElement.textContent = `Temperature: ${formattedData.Temp}°F`;
         forecastWindElement.textContent = `Wind: ${formattedData.Wind} mph`;
         forecastHumidityElement.textContent = `Humidity: ${formattedData.Humidity}%`;
-      });
+
+        index++;
+      }
     })
     .catch(error => {
       console.log(error);
@@ -148,8 +167,9 @@ function getCurrentDate() {
 }
 
 function getForecastDay(dateString) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', { weekday: 'long' });
+  const date = new Date(dateString.split(' ')[0]);
+  const day = date.toLocaleDateString('en-US', { weekday: 'long' });
+  return day;
 }
 
 document.addEventListener('DOMContentLoaded', function() {
