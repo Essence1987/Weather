@@ -4,48 +4,13 @@ function getCurrentWeather(cityName) {
   fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=imperial&appid=996d1e5bbde7df636e3040824eb2d0d9`)
     .then(response => {
       if (!response.ok) {
-        throw new Error('City not found. Check spelling and try again.');
+        handleCityNotFound();
       }
       return response.json();
     })
     .then(data => {
       console.log(data);
-
-      const formattedData = {
-        City: data.name,
-        WeatherIcon: data.weather[0].icon,
-        Temp: data.main.temp,
-        Wind: data.wind.speed,
-        Humidity: data.main.humidity,
-      };
-      console.log(data.name);
-      console.log(data.weather[0].icon);
-      console.log(data.main.temp);
-      console.log(data.wind.speed);
-      console.log(data.main.humidity);
-
-      const cityNameElement = document.getElementById('cityName');
-      const currentDateElement = document.getElementById('currentDate');
-      const weatherIconElement = document.getElementById('weatherIcon');
-      const temperatureElement = document.getElementById('temperature');
-      const windElement = document.getElementById('wind');
-      const humidityElement = document.getElementById('humidity');
-
-      cityNameElement.textContent = `${formattedData.City}:`;
-      currentDateElement.textContent = getCurrentDate();
-      weatherIconElement.src = `https://openweathermap.org/img/wn/${formattedData.WeatherIcon}.png`;
-      temperatureElement.textContent = `Temperature: ${formattedData.Temp}°F`;
-      windElement.textContent = `Wind: ${formattedData.Wind} mph`;
-      humidityElement.textContent = `Humidity: ${formattedData.Humidity}%`;
-
-      // Show the weather icon element
-      weatherIconElement.style.display = 'inline';
-
-      // Save the searched city in local storage
-      saveSearchedCity(cityName);
-
-      // Clear the error message
-      clearErrorMessage();
+      updateWeatherUI(data);
     })
     .catch(error => {
       console.log(error);
@@ -57,67 +22,20 @@ function getCurrentForecast(cityName) {
   fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&units=imperial&appid=996d1e5bbde7df636e3040824eb2d0d9`)
     .then(response => {
       if (!response.ok) {
-        throw new Error('City not found. Check spelling and try again.');
+        handleCityNotFound();
       }
       return response.json();
     })
     .then(data => {
       console.log(data);
-
-      const forecastData = data.list;
-
-      // Create an object to store the forecast data grouped by day
-      const dailyForecasts = {};
-
-      forecastData.forEach(item => {
-        const date = item.dt_txt.split(' ')[0];
-
-        if (dailyForecasts[date]) {
-          dailyForecasts[date].push(item);
-        } else {
-          dailyForecasts[date] = [item];
-        }
-      });
-
-      let index = 1;
-      for (const date in dailyForecasts) {
-        if (index > 5) break; // Display only the forecast for the next 5 days
-
-        const dayForecast = dailyForecasts[date][0];
-        const formattedData = {
-          Day: getForecastDay(dayForecast.dt_txt),
-          WeatherIcon: dayForecast.weather[0].icon,
-          Temp: dayForecast.main.temp,
-          Wind: dayForecast.wind.speed,
-          Humidity: dayForecast.main.humidity,
-        };
-
-        console.log(formattedData.Day);
-        console.log(formattedData.WeatherIcon);
-        console.log(formattedData.Temp);
-        console.log(formattedData.Wind);
-        console.log(formattedData.Humidity);
-
-        const forecastDayElement = document.getElementById(`forecastDay${index}`);
-        const forecastWeatherIconElement = document.getElementById(`forecastWeatherIcon${index}`);
-        const forecastTemperatureElement = document.getElementById(`forecastTemperature${index}`);
-        const forecastWindElement = document.getElementById(`forecastWind${index}`);
-        const forecastHumidityElement = document.getElementById(`forecastHumidity${index}`);
-
-        forecastDayElement.textContent = formattedData.Day;
-        forecastWeatherIconElement.src = `https://openweathermap.org/img/wn/${formattedData.WeatherIcon}.png`;
-        forecastTemperatureElement.textContent = `Temperature: ${formattedData.Temp}°F`;
-        forecastWindElement.textContent = `Wind: ${formattedData.Wind} mph`;
-        forecastHumidityElement.textContent = `Humidity: ${formattedData.Humidity}%`;
-
-        index++;
-      }
+      updateForecastUI(data);
     })
     .catch(error => {
       console.log(error);
       displayErrorMessage(error.message);
     });
 }
+
 
 function displayErrorMessage(message) {
   const errorMessageElement = document.getElementById('errorMessage');
@@ -132,6 +50,7 @@ function clearErrorMessage() {
 }
 
 function saveSearchedCity(cityName) {
+  // Retrieve the existing list of searched cities from local storage
   let cities = localStorage.getItem('cities');
   cities = cities ? JSON.parse(cities) : [];
 
@@ -156,9 +75,111 @@ function updateSearchedCitiesUI(cities) {
 
   cities.forEach(city => {
     const cityItem = document.createElement('li');
-    cityItem.textContent = city;
+    const cityButton = document.createElement('button'); // Create a button element
+    cityButton.textContent = city;
+    cityButton.classList.add('searched-city'); // Add the 'searched-city' class to apply the button styling
+
+    cityButton.addEventListener('click', function() {
+      getCurrentWeather(city);
+      getCurrentForecast(city);
+      clearErrorMessage();
+    });
+
+    cityItem.appendChild(cityButton);
     searchedCitiesElement.appendChild(cityItem);
   });
+}
+
+
+
+function updateWeatherUI(data) {
+  const formattedData = {
+    City: data.name,
+    WeatherIcon: data.weather[0].icon,
+    Temp: data.main.temp,
+    Wind: data.wind.speed,
+    Humidity: data.main.humidity,
+  };
+
+  console.log(formattedData.City);
+  console.log(formattedData.WeatherIcon);
+  console.log(formattedData.Temp);
+  console.log(formattedData.Wind);
+  console.log(formattedData.Humidity);
+
+  const cityNameElement = document.getElementById('cityName');
+  const currentDateElement = document.getElementById('currentDate');
+  const weatherIconElement = document.getElementById('weatherIcon');
+  const temperatureElement = document.getElementById('temperature');
+  const windElement = document.getElementById('wind');
+  const humidityElement = document.getElementById('humidity');
+
+  cityNameElement.textContent = `${formattedData.City}:`;
+  currentDateElement.textContent = getCurrentDate();
+  weatherIconElement.src = `https://openweathermap.org/img/wn/${formattedData.WeatherIcon}.png`;
+  temperatureElement.textContent = `Temperature: ${formattedData.Temp}°F`;
+  windElement.textContent = `Wind: ${formattedData.Wind} mph`;
+  humidityElement.textContent = `Humidity: ${formattedData.Humidity}%`;
+
+  // Show the weather icon element
+  weatherIconElement.style.display = 'inline';
+
+  // Save the searched city in local storage
+  saveSearchedCity(formattedData.City);
+
+  // Clear the error message
+  clearErrorMessage();
+}
+
+function updateForecastUI(data) {
+  const forecastData = data.list;
+
+  // Create an object to store the forecast data grouped by day
+  const dailyForecasts = {};
+
+  forecastData.forEach(item => {
+    const date = item.dt_txt.split(' ')[0];
+
+    if (dailyForecasts[date]) {
+      dailyForecasts[date].push(item);
+    } else {
+      dailyForecasts[date] = [item];
+    }
+  });
+
+  let index = 1;
+  for (const date in dailyForecasts) {
+    if (index > 5) break; // Display only the forecast for the next 5 days
+
+    const dayForecast = dailyForecasts[date][0];
+    const formattedData = {
+      Day: getForecastDay(dayForecast.dt_txt),
+      WeatherIcon: dayForecast.weather[0].icon,
+      Temp: dayForecast.main.temp,
+      Wind: dayForecast.wind.speed,
+      Humidity: dayForecast.main.humidity,
+    };
+
+    console.log(formattedData.Day);
+    console.log(formattedData.WeatherIcon);
+    console.log(formattedData.Temp);
+    console.log(formattedData.Wind);
+    console.log(formattedData.Humidity);
+
+    const forecastDayElement = document.getElementById(`forecastDay${index}`);
+    const forecastWeatherIconElement = document.getElementById(`forecastWeatherIcon${index}`);
+    const forecastTemperatureElement = document.getElementById(`forecastTemperature${index}`);
+    const forecastWindElement = document.getElementById(`forecastWind${index}`);
+    const forecastHumidityElement = document.getElementById(`forecastHumidity${index}`);
+
+    forecastDayElement.textContent = formattedData.Day;
+    forecastWeatherIconElement.src = `https://openweathermap.org/img/wn/${formattedData.WeatherIcon}.png`;
+    forecastTemperatureElement.textContent = `Temperature: ${formattedData.Temp}°F`;
+    forecastWindElement.textContent = `Wind: ${formattedData.Wind} mph`;
+    forecastHumidityElement.textContent = `Humidity: ${formattedData.Humidity}%`;
+
+    index++;
+  }
 }
 
 function getCurrentDate() {
@@ -182,8 +203,16 @@ document.addEventListener('DOMContentLoaded', function() {
     updateSearchedCitiesUI(parsedCities);
   }
 
-  // Get user's location and set it as the default city
-  if ("geolocation" in navigator) {
+  // Check if the user's location is available
+  if (!navigator.geolocation) {
+    // Geolocation is not supported
+    console.log('Geolocation is not supported');
+    // Set a default city name here
+    city = 'Your Default City';
+    getCurrentWeather(city);
+    getCurrentForecast(city);
+  } else {
+    // Geolocation is supported
     navigator.geolocation.getCurrentPosition(
       function(position) {
         const { latitude, longitude } = position.coords;
@@ -197,10 +226,18 @@ document.addEventListener('DOMContentLoaded', function() {
           })
           .catch(error => {
             console.log(error);
+            // Set a default city name here
+            city = 'Ogden';
+            getCurrentWeather(city);
+            getCurrentForecast(city);
           });
       },
       function(error) {
         console.log(error);
+        // Set a default city name here
+        city = 'Detroit';
+        getCurrentWeather(city);
+        getCurrentForecast(city);
       }
     );
   }
@@ -212,3 +249,8 @@ document.addEventListener('DOMContentLoaded', function() {
     clearErrorMessage(); // Clear the error message
   });
 });
+
+function handleCityNotFound() {
+  throw new Error('City not found. Check spelling and try again.');
+}
+

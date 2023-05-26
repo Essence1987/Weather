@@ -6,81 +6,120 @@ header {
   text-align: center;
 }
 
+/* General Styling */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
 /* Weather Data Container */
 #weatherData {
   display: flex;
-  flex-direction: column; /* Change to column */
-  align-items: center; /* Align items in the center */
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-top: 20px;
-  width: 75%; /* Adjust the width of the API results */
-  margin: 0 auto; /* Center the weather data container */
+  width: 75%;
+  margin: 0 auto;
 }
 
 /* Search Box Container */
 .search-box {
-  text-align: center;
+  text-align: left;
   margin-bottom: 20px;
-  width: 100%; /* Adjust the width of the search box */
+  margin-right: 10px; /* Add right margin for spacing */
+  width: 40%;
 }
 
 .search-box h2 {
   margin-bottom: 10px;
 }
 
+.search-input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .search-input input {
   padding: 5px;
-  margin-right: 5px;
+  margin-bottom: 5px;
 }
 
-.search-input button {
-  padding: 5px 10px;
+#searchButton {
+  padding: 10px 20px;
+  background-color: darkblue;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
 
-/* Weather Info Container */
-.weather-info {
+#searchButton:hover {
+  background-color: blue;
+}
+
+#searchedCities {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  text-align: center; /* Center the search history */
+}
+
+.searched-city {
+  background-color: blue;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  margin-bottom: 5px; /* Add margin bottom for spacing between items */
+  border-radius: 5px; /* Add border radius for rounded corners */
+}
+
+
+/* Current Weather */
+.current-weather {
+  border: 2px solid black;
+  padding: 10px;
+  width: 40%;
+}
+
+.current-weather .weather-info {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 10px;
 }
 
-.weather-info h2 {
+.current-weather .weather-info h2 {
   margin-top: 10px;
   margin-bottom: 5px;
 }
 
-.weather-info img {
+.current-weather .weather-info img {
   margin-bottom: 5px;
 }
 
-/* Weather Details Container */
-.weather-details {
+.current-weather .weather-details {
   display: flex;
-  justify-content: space-between;
-  width: 200px;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.weather-details p {
-  flex: 1;
+.current-weather .weather-details p {
   text-align: center;
   margin: 5px;
 }
 
-/* Search History List */
-#searchedCities {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
+/* Forecast */
 .forecast {
   margin-top: 20px;
   display: flex;
-  flex-wrap: wrap; /* Allow wrapping to new lines */
-  justify-content: center; /* Center the forecast items horizontally */
-  gap: 20px; /* Set spacing between forecast items */
-  width: 100%; /* Set width to 100% */
-  order: 3; /* Move the forecast section to the bottom */
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
 }
 
 .forecast h2 {
@@ -89,24 +128,25 @@ header {
 }
 
 .forecast-info {
-  display: flex; /* Updated to flex */
-  flex-wrap: wrap; /* Allow wrapping to new lines */
-  gap: 20px; /* Updated to set spacing between forecast days */
-  width: 100%; /* Set width to 100% to allow horizontal scrolling */
-  justify-content: center; /* Center the forecast days horizontally */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;
+  justify-content: center;
 }
 
 .forecast-day {
-  background-color: #f0f0f0;
+  background-color: rgb(40, 40, 100);
   padding: 10px;
   text-align: center;
-  width: 20%; /* Each forecast day takes up 20% of the container width */
+  width: 20%;
   box-sizing: border-box;
 }
 
 .forecast-day h3 {
   font-size: 18px;
   margin-bottom: 5px;
+  color: white;
 }
 
 .forecast-day img {
@@ -118,6 +158,11 @@ header {
 .forecast-day p {
   font-size: 14px;
   margin-bottom: 3px;
+  color: white;
+}
+
+.forecast-day:nth-child(5) {
+  width: 100%;
 }
 
 /* Error Message */
@@ -126,15 +171,23 @@ header {
   margin-top: 10px;
 }
 
-/* General Styling */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
 .container {
   max-width: 960px;
   margin: 0 auto;
   padding: 20px;
+}
+
+/* Footer */
+footer {
+  background-color: darkblue;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+}
+
+footer p {
+  margin: 0;
 }
